@@ -1,5 +1,7 @@
+@using System.Text
 @using System.Text.Json
 @using System.Text.RegularExpressions
+@using System.Xml
 @if (new [] {"jpg", "jpeg", "png"}.Contains(Extension))
 {
     <img src="data:image/@( Extension );base64,@( Convert.ToBase64String(File.ReadAllBytes(FilePath)) )" />
@@ -25,6 +27,10 @@ else
         {
             return FormatJson(File.ReadAllText(filePath));
         }
+        if (Extension == "xml")
+        {
+            return FormatXml(filePath);
+        }
 
         return File.ReadAllText(filePath);
     }
@@ -36,5 +42,17 @@ else
 
         // Decode unicode characters
         return Regex.Unescape(formattedJson);
+    }
+
+    private string FormatXml(string xmlFilePath)
+    {
+        var doc = new XmlDocument();
+        doc.Load(xmlFilePath);
+
+        var memoryStream = new MemoryStream();
+        doc.Save(memoryStream);
+
+        // Unminify minified XML for better readability
+        return Encoding.UTF8.GetString(memoryStream.ToArray());
     }
 }
