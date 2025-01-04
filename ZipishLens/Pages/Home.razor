@@ -11,7 +11,7 @@
 <ul>
     @foreach (var file in _loadedFiles)
     {
-        <li @onclick="@(_ => SelectFile(file))">@Path.GetFileName(file)</li>
+        <li @onclick="@(_ => SelectFile(file))">@file.Replace(_tmpDirPath, "")</li>
     }
 </ul>
 
@@ -23,7 +23,7 @@
 @code {
     private IEnumerable<string> _loadedFiles = [];
     private readonly string _tmpFilePath = "/tmp/tmp_file.zip";
-    private readonly string _tmpDirPath = "/tmp/tmp_dir";
+    private readonly string _tmpDirPath = "/tmp/tmp_dir/";
     private string _selectedFile = "";
 
     private void SetUp()
@@ -52,7 +52,7 @@
         await uploadedFile.OpenReadStream().CopyToAsync(fs);
         ZipFile.ExtractToDirectory(_tmpFilePath, _tmpDirPath);
 
-        _loadedFiles = Directory.EnumerateFiles(_tmpDirPath);
+        _loadedFiles = Directory.EnumerateFiles(_tmpDirPath, "", SearchOption.AllDirectories);
     }
 
     private void SelectFile(string filePath)
