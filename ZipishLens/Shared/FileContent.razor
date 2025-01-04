@@ -1,10 +1,11 @@
+@using System.Text.Json
 @if (new [] {"jpg", "jpeg", "png"}.Contains(Extension))
 {
     <img src="data:image/@( Extension );base64,@( Convert.ToBase64String(File.ReadAllBytes(FilePath)) )" />
 }
 else if(new [] {"txt", "json", "xml"}.Contains(Extension))
 {
-    <p>@File.ReadAllText(FilePath)</p>
+    <pre>@ReadTextFile(FilePath)</pre>
 }
 
 @code {
@@ -12,4 +13,21 @@ else if(new [] {"txt", "json", "xml"}.Contains(Extension))
     public required string FilePath { get; set; }
 
     private string Extension => Path.GetExtension(FilePath).TrimStart('.');
+
+    private string ReadTextFile(string filePath)
+    {
+        if (Extension == "json")
+        {
+            return FormatJson(File.ReadAllText(filePath));
+        }
+
+        return File.ReadAllText(filePath);
+    }
+
+    private static string FormatJson(string jsonContent)
+    {
+        // Unminify minified JSON for better readability
+        return JsonSerializer.Serialize(JsonSerializer.Deserialize<object>(jsonContent), new JsonSerializerOptions { WriteIndented = true });
+    }
+
 }
