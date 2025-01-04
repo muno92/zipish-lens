@@ -1,7 +1,62 @@
 ﻿@page "/"
+@using System.IO.Compression
+@using ZipishLens.Shared
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+<InputFile OnChange="LoadFiles"/>
+
+<ul>
+    @foreach (var file in _loadedFiles)
+    {
+        <li @onclick="@(_ => SelectFile(file))">@Path.GetFileName(file)</li>
+    }
+</ul>
+
+@if (!string.IsNullOrEmpty(_selectedFile))
+{
+    <FileContent FilePath="@_selectedFile"/>
+}
+
+@code {
+    private IEnumerable<string> _loadedFiles = [];
+    private readonly string _tmpFilePath = "/tmp/tmp_file.zip";
+    private readonly string _tmpDirPath = "/tmp/tmp_dir";
+    private string _selectedFile = "";
+
+    private void SetUp()
+    {
+        _loadedFiles = [];
+        _selectedFile = "";
+        if (File.Exists(_tmpFilePath))
+        {
+            File.Delete(_tmpFilePath);
+        }
+
+        if (Directory.Exists(_tmpDirPath))
+        {
+            Directory.Delete(_tmpDirPath, true);
+        }
+        Directory.CreateDirectory(_tmpDirPath);
+    }
+
+    private async Task LoadFiles(InputFileChangeEventArgs obj)
+    {
+        SetUp();
+
+        var uploadedFile = obj.GetMultipleFiles().Single();
+
+        await using FileStream fs = new FileStream(_tmpFilePath, FileMode.Create);
+        await uploadedFile.OpenReadStream().CopyToAsync(fs);
+        ZipFile.ExtractToDirectory(_tmpFilePath, _tmpDirPath);
+
+        _loadedFiles = Directory.EnumerateFiles(_tmpDirPath);
+    }
+
+    private void SelectFile(string filePath)
+    {
+        _selectedFile = filePath;
+    }
+}

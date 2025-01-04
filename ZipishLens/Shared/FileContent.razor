@@ -1,0 +1,15 @@
+@if (new [] {"jpg", "jpeg", "png"}.Contains(Extension))
+{
+    <img src="data:image/@( Extension );base64,@( Convert.ToBase64String(File.ReadAllBytes(FilePath)) )" />
+}
+else if(new [] {"txt", "json", "xml"}.Contains(Extension))
+{
+    <p>@File.ReadAllText(FilePath)</p>
+}
+
+@code {
+    [Parameter]
+    public required string FilePath { get; set; }
+
+    private string Extension => Path.GetExtension(FilePath).TrimStart('.');
+}
