@@ -29,7 +29,7 @@ else
         return File.ReadAllText(filePath);
     }
 
-    private static string FormatJson(string jsonContent)
+    private string FormatJson(string jsonContent)
     {
         // Unminify minified JSON for better readability
         var formattedJson = JsonSerializer.Serialize(JsonSerializer.Deserialize<object>(jsonContent), new JsonSerializerOptions { WriteIndented = true });
