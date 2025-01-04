@@ -8,6 +8,10 @@ else if(new [] {"txt", "json", "xml"}.Contains(Extension))
 {
     <pre>@ReadTextFile(FilePath)</pre>
 }
+else
+{
+    <p>Unsupported file type</p>
+}
 
 @code {
     [Parameter]
