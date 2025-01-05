@@ -1,11 +1,11 @@
-<ul>
+<ul class="@(IsRoot ? "rootEntry" : null)">
 @foreach (var entry in EntryPaths)
 {
     @if (entry.Attributes.HasFlag(FileAttributes.Directory))
     {
         <li>
             @entry.Name
-            <DirectoryEntries BaseDir="@BaseDir" EntryPaths="@(new DirectoryInfo(entry.FullName).EnumerateFileSystemInfos())" OnSelectFile="OnSelectFile" />
+            <DirectoryEntries BaseDir="@BaseDir" EntryPaths="@(new DirectoryInfo(entry.FullName).EnumerateFileSystemInfos())" OnSelectFile="OnSelectFile" IsRoot="false" />
         </li>
     }
     else if (entry.Attributes.HasFlag(FileAttributes.Normal))
@@ -24,4 +24,7 @@
 
     [Parameter]
     public required EventCallback<string> OnSelectFile { get; set; }
+
+    [Parameter]
+    public required bool IsRoot { get; set; }
 }

@@ -6,6 +6,8 @@ main {
     .sidebar {
         flex: 0 0 300px;
         background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+        display: flex;
+        flex-direction: column;
 
         .top-row {
             padding-left: 1rem;
