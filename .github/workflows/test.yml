@@ -20,3 +20,23 @@ jobs:
           solutionPath: ./ZipishLens.sln
           exclude: ZipishLens/wwwroot/**
           minimumReportSeverity: 'WARNING'
+  deploy:
+    needs: [ code_analysis ]
+    permissions:
+      contents: read
+      deployments: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+      - name: Build
+        run: |
+          dotnet publish -c Release ZippishLens -o output
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy output/wwwroot --project-name=zipish-lens
