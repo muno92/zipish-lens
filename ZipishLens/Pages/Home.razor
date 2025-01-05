@@ -58,7 +58,7 @@
         var uploadedFile = obj.GetMultipleFiles().Single();
 
         await using FileStream fs = new FileStream(_tmpFilePath, FileMode.Create);
-        await uploadedFile.OpenReadStream().CopyToAsync(fs);
+        await uploadedFile.OpenReadStream(100 * 1024 * 1024).CopyToAsync(fs);
         ZipFile.ExtractToDirectory(_tmpFilePath, _tmpDirPath);
 
         _loadedFiles = new DirectoryInfo(_tmpDirPath).EnumerateFileSystemInfos();
