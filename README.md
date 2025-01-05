@@ -1,6 +1,6 @@
 # ZipishLens
 
-[![Test](https://github.com/muno92/zipish-lens/actions/workflows/test.yml/badge.svg)](https://github.com/muno92/zipish-lens/actions/workflows/test.yml)
+[![Test/Deploy](https://github.com/muno92/zipish-lens/actions/workflows/test_deploy.yml/badge.svg)](https://github.com/muno92/zipish-lens/actions/workflows/test_deploy.yml)
 
 [https://zipish-lens.muno92.dev/](https://zipish-lens.muno92.dev/)
 
