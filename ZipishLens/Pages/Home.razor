@@ -30,7 +30,7 @@
 </main>
 
 @code {
-    private IEnumerable<string> _loadedFiles = [];
+    private IEnumerable<FileSystemInfo> _loadedFiles = [];
     private readonly string _tmpFilePath = "/tmp/tmp_file.zip";
     private readonly string _tmpDirPath = "/tmp/tmp_dir/";
     private string _selectedFile = "";
@@ -61,7 +61,7 @@
         await uploadedFile.OpenReadStream().CopyToAsync(fs);
         ZipFile.ExtractToDirectory(_tmpFilePath, _tmpDirPath);
 
-        _loadedFiles = Directory.EnumerateFileSystemEntries(_tmpDirPath);
+        _loadedFiles = new DirectoryInfo(_tmpDirPath).EnumerateFileSystemInfos();
     }
 
     private void SelectFile(string filePath)

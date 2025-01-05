@@ -1,7 +1,17 @@
 <ul>
-@foreach (var file in EntryPaths)
+@foreach (var entry in EntryPaths)
 {
-    <li @onclick="() => OnSelectFile.InvokeAsync(file)">@file.Replace(BaseDir, "")</li>
+    @if (entry.Attributes.HasFlag(FileAttributes.Directory))
+    {
+        <li>
+            @entry.Name
+            <DirectoryEntries BaseDir="@BaseDir" EntryPaths="@new DirectoryInfo(entry.FullName).EnumerateFileSystemInfos()" OnSelectFile="OnSelectFile" />
+        </li>
+    }
+    else if (entry.Attributes.HasFlag(FileAttributes.Normal))
+    {
+        <li @onclick="() => OnSelectFile.InvokeAsync(entry.FullName)">@entry.Name</li>
+    }
 }
 </ul>
 
@@ -10,7 +20,7 @@
     public required string BaseDir { get; set; }
 
     [Parameter]
-    public required IEnumerable<string> EntryPaths { get; set; }
+    public required IEnumerable<FileSystemInfo> EntryPaths { get; set; }
 
     [Parameter]
     public required EventCallback<string> OnSelectFile { get; set; }
