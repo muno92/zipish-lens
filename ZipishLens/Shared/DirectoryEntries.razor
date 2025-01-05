@@ -5,7 +5,7 @@
     {
         <li>
             @entry.Name
-            <DirectoryEntries BaseDir="@BaseDir" EntryPaths="@new DirectoryInfo(entry.FullName).EnumerateFileSystemInfos()" OnSelectFile="OnSelectFile" />
+            <DirectoryEntries BaseDir="@BaseDir" EntryPaths="@(new DirectoryInfo(entry.FullName).EnumerateFileSystemInfos())" OnSelectFile="OnSelectFile" />
         </li>
     }
     else if (entry.Attributes.HasFlag(FileAttributes.Normal))
