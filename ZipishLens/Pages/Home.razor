@@ -10,12 +10,7 @@
             </div>
         </div>
 
-        <ul>
-            @foreach (var file in _loadedFiles)
-            {
-                <li @onclick="@(_ => SelectFile(file))">@file.Replace(_tmpDirPath, "")</li>
-            }
-        </ul>
+        <DirectoryEntries BaseDir="@_tmpDirPath" EntryPaths="_loadedFiles" OnSelectFile="SelectFile" />
     </nav>
 
     <section>
@@ -66,7 +61,7 @@
         await uploadedFile.OpenReadStream().CopyToAsync(fs);
         ZipFile.ExtractToDirectory(_tmpFilePath, _tmpDirPath);
 
-        _loadedFiles = Directory.EnumerateFiles(_tmpDirPath, "", SearchOption.AllDirectories);
+        _loadedFiles = Directory.EnumerateFileSystemEntries(_tmpDirPath);
     }
 
     private void SelectFile(string filePath)

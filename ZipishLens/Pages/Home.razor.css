@@ -10,10 +10,6 @@ main {
         .top-row {
             padding-left: 1rem;
         }
-
-        li {
-            color: rgb(255, 255, 255, 0.7);
-        }
     }
 
     section {

@@ -1,0 +1,17 @@
+<ul>
+@foreach (var file in EntryPaths)
+{
+    <li @onclick="() => OnSelectFile.InvokeAsync(file)">@file.Replace(BaseDir, "")</li>
+}
+</ul>
+
+@code {
+    [Parameter]
+    public required string BaseDir { get; set; }
+
+    [Parameter]
+    public required IEnumerable<string> EntryPaths { get; set; }
+
+    [Parameter]
+    public required EventCallback<string> OnSelectFile { get; set; }
+}
