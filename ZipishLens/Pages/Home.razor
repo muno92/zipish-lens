@@ -2,25 +2,13 @@
 @using System.IO.Compression
 @using ZipishLens.Shared
 
-<div class="sidebar">
-    <div class="top-row ps-3 navbar navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="">ZipishLens</a>
-        </div>
-    </div>
-</div>
-
 <main>
-    <div class="top-row px-4">
-        <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-    </div>
-
-    <article class="content px-4">
-        <PageTitle>Home</PageTitle>
-
-        <h1>Hello, world!</h1>
-
-        <InputFile OnChange="LoadFiles"/>
+    <nav class="sidebar">
+        <div class="top-row navbar navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="">ZipishLens</a>
+            </div>
+        </div>
 
         <ul>
             @foreach (var file in _loadedFiles)
@@ -28,13 +16,23 @@
                 <li @onclick="@(_ => SelectFile(file))">@file.Replace(_tmpDirPath, "")</li>
             }
         </ul>
-    </article>
-</main>
+    </nav>
 
-@if (!string.IsNullOrEmpty(_selectedFile))
-{
-    <FileContent FilePath="@_selectedFile"/>
-}
+    <section>
+        <div class="top-row">
+            <InputFile OnChange="LoadFiles"/>
+            <a href="https://github.com/muno92/zipish-lens/" target="_blank">About</a>
+        </div>
+
+        <article class="content">
+            @if (!string.IsNullOrEmpty(_selectedFile))
+            {
+                <FileContent FilePath="@_selectedFile"/>
+            }
+        </article>
+    </section>
+
+</main>
 
 @code {
     private IEnumerable<string> _loadedFiles = [];
