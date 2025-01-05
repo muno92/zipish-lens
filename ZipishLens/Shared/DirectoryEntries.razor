@@ -4,8 +4,10 @@
     @if (entry.Attributes.HasFlag(FileAttributes.Directory))
     {
         <li>
-            @entry.Name
-            <DirectoryEntries BaseDir="@BaseDir" EntryPaths="@(new DirectoryInfo(entry.FullName).EnumerateFileSystemInfos())" OnSelectFile="OnSelectFile" IsRoot="false" />
+            <details>
+                <summary>@entry.Name</summary>
+                <DirectoryEntries BaseDir="@BaseDir" EntryPaths="@(new DirectoryInfo(entry.FullName).EnumerateFileSystemInfos())" OnSelectFile="OnSelectFile" IsRoot="false"/>
+            </details>
         </li>
     }
     else if (entry.Attributes.HasFlag(FileAttributes.Normal))
