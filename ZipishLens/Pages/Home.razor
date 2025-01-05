@@ -2,18 +2,30 @@
 @using System.IO.Compression
 @using ZipishLens.Shared
 
-<PageTitle>Home</PageTitle>
+<div class="sidebar">
+    <NavMenu />
+</div>
 
-<h1>Hello, world!</h1>
+<main>
+    <div class="top-row px-4">
+        <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+    </div>
 
-<InputFile OnChange="LoadFiles"/>
+    <article class="content px-4">
+        <PageTitle>Home</PageTitle>
 
-<ul>
-    @foreach (var file in _loadedFiles)
-    {
-        <li @onclick="@(_ => SelectFile(file))">@file.Replace(_tmpDirPath, "")</li>
-    }
-</ul>
+        <h1>Hello, world!</h1>
+
+        <InputFile OnChange="LoadFiles"/>
+
+        <ul>
+            @foreach (var file in _loadedFiles)
+            {
+                <li @onclick="@(_ => SelectFile(file))">@file.Replace(_tmpDirPath, "")</li>
+            }
+        </ul>
+    </article>
+</main>
 
 @if (!string.IsNullOrEmpty(_selectedFile))
 {
