@@ -20,11 +20,10 @@
         </div>
 
         <article class="content">
-            @if (!string.IsNullOrEmpty(_errorMessage))
+            @if (!string.IsNullOrEmpty(_message))
             {
-                <p>@_errorMessage</p>
+                <p>@_message</p>
             }
-
             @if (!string.IsNullOrEmpty(_selectedFile))
             {
                 <FileContent FilePath="@_selectedFile"/>
@@ -39,13 +38,13 @@
     private readonly string _tmpFilePath = "/tmp/tmp_file.zip";
     private readonly string _tmpDirPath = "/tmp/tmp_dir/";
     private string _selectedFile = "";
-    private string _errorMessage = "";
+    private string _message = "Please upload a zipish file. (a file that can be unzipped as a zip file, e.g. pkpass, xlsx)";
 
     private void SetUp()
     {
         _loadedFiles = [];
         _selectedFile = "";
-        _errorMessage = "";
+        _message = "";
         if (File.Exists(_tmpFilePath))
         {
             File.Delete(_tmpFilePath);
@@ -73,7 +72,7 @@
         }
         catch (IOException)
         {
-            _errorMessage = "Unable to upload file. File size limit is 100MB";
+            _message = "Unable to upload file. File size limit is 100MB";
             return;
         }
 
@@ -83,7 +82,7 @@
         }
         catch (InvalidDataException)
         {
-            _errorMessage = "Unable to unzip uploaded file.";
+            _message = "Unable to unzip uploaded file.";
             return;
         }
 
