@@ -20,6 +20,11 @@
         </div>
 
         <article class="content">
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <p>@_errorMessage</p>
+            }
+
             @if (!string.IsNullOrEmpty(_selectedFile))
             {
                 <FileContent FilePath="@_selectedFile"/>
@@ -34,11 +39,13 @@
     private readonly string _tmpFilePath = "/tmp/tmp_file.zip";
     private readonly string _tmpDirPath = "/tmp/tmp_dir/";
     private string _selectedFile = "";
+    private string _errorMessage = "";
 
     private void SetUp()
     {
         _loadedFiles = [];
         _selectedFile = "";
+        _errorMessage = "";
         if (File.Exists(_tmpFilePath))
         {
             File.Delete(_tmpFilePath);
@@ -58,8 +65,27 @@
         var uploadedFile = obj.GetMultipleFiles().Single();
 
         await using FileStream fs = new FileStream(_tmpFilePath, FileMode.Create);
-        await uploadedFile.OpenReadStream(100 * 1024 * 1024).CopyToAsync(fs);
-        ZipFile.ExtractToDirectory(_tmpFilePath, _tmpDirPath);
+        try
+        {
+            // Large files (> 250 MB) may not be uploaded.
+            // https://learn.microsoft.com/en-us/aspnet/core/blazor/file-uploads?view=aspnetcore-9.0#file-size-read-and-upload-limits
+            await uploadedFile.OpenReadStream(100 * 1024 * 1024).CopyToAsync(fs);
+        }
+        catch (IOException)
+        {
+            _errorMessage = "Unable to upload file. File size limit is 100MB";
+            return;
+        }
+
+        try
+        {
+            ZipFile.ExtractToDirectory(_tmpFilePath, _tmpDirPath);
+        }
+        catch (InvalidDataException)
+        {
+            _errorMessage = "Unable to unzip uploaded file.";
+            return;
+        }
 
         _loadedFiles = new DirectoryInfo(_tmpDirPath).EnumerateFileSystemInfos();
     }
