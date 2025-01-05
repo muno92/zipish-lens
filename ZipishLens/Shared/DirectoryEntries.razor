@@ -6,7 +6,7 @@
         <li>
             <details>
                 <summary>@entry.Name</summary>
-                <DirectoryEntries BaseDir="@BaseDir" EntryPaths="@(new DirectoryInfo(entry.FullName).EnumerateFileSystemInfos())" OnSelectFile="OnSelectFile" IsRoot="false"/>
+                <DirectoryEntries EntryPaths="@(new DirectoryInfo(entry.FullName).EnumerateFileSystemInfos())" OnSelectFile="OnSelectFile" IsRoot="false"/>
             </details>
         </li>
     }
@@ -18,9 +18,6 @@
 </ul>
 
 @code {
-    [Parameter]
-    public required string BaseDir { get; set; }
-
     [Parameter]
     public required IEnumerable<FileSystemInfo> EntryPaths { get; set; }
 
