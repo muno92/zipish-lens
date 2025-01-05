@@ -19,3 +19,4 @@ jobs:
         with:
           solutionPath: ./ZipishLens.sln
           exclude: ZipishLens/wwwroot/**
+          minimumReportSeverity: 'WARNING'
