@@ -13,7 +13,7 @@ jobs:
       - name: Restore
         run: dotnet restore
       - name: Build
-        run: dotnet build --no-restore -warnAsError RegexTester
+        run: dotnet build --no-restore -warnAsError ZipishLens
       - name: Inspection
         uses: muno92/resharper_inspectcode@v1
         with:
