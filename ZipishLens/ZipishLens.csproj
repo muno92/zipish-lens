@@ -11,8 +11,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.0" PrivateAssets="all" />
   </ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\sample-data\weather.json" />
-  </ItemGroup>
-
 </Project>
