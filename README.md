@@ -8,3 +8,5 @@
 
 Web viewer for zipish file by WebAssembly.  
 (_zipish_ file is a file that can be unzipped as a zip file, e.g. pkpass, xlsx)
+
+test
