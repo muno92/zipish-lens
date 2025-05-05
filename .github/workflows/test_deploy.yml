@@ -46,6 +46,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
+      issues: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -78,15 +79,15 @@ jobs:
             | ----------------------- | - |
             | **Preview URL**:        | ${process.env.DEPLOYMENT_URL} |
             `;
-      
-      
-            const comments = await github.rest.issues.listComments({
+            
+            
+            const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
         
-            const previewUrlComment = comments.data.find(comment => comment.body.includes(commentTag));
+            const previewUrlComment = comments.find(comment => comment.body.includes(commentTag));
             
             if (previewUrlComment) {
               await github.rest.issues.updateComment({
