@@ -76,6 +76,7 @@ jobs:
             | ----------------------- | - |
             | **Preview URL**:        | ${process.env.DEPLOYMENT_URL} |
             `;
+            console.log(context);
             
             await github.rest.issues.createComment({
               issue_number: context.pull_request.number,
