@@ -63,6 +63,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: versions upload
       - name: Output Preview URL to Pull Request
+        if: github.event_name == 'pull_request'
         env:
           DEPLOYMENT_URL: ${{ steps.deploy-preview.outputs.deployment-url }}
         uses: actions/github-script@v6
