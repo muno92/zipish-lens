@@ -77,8 +77,9 @@ jobs:
             | **Preview URL**:        | ${process.env.DEPLOYMENT_URL} |
             `;
             
-            await github.rest.pulls.createComment({
-              ...context.repo,
-              pull_number: context.payload.pull_request.number,
-              body: body,
+            await github.rest.issue.createComment({
+              issue_number: context.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
             });
