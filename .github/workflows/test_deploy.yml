@@ -69,17 +69,35 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            const commentTag = '<!-- preview-url-comment -->';
             const body = `
+            ${commentTag}
             # Preview URL
   
             | Name                    | Result |
             | ----------------------- | - |
             | **Preview URL**:        | ${process.env.DEPLOYMENT_URL} |
             `;
-            console.log(context);
+      
+      
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+        
+            const previewUrlComment = comments.find(comment => comment.body.includes(commentTag));
             
+            if (previewUrlComment) {
+              await github.rest.issues.updateComment({
+                comment_id: previewUrlComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+              return;           
             await github.rest.issues.createComment({
-              issue_number: context.pull_request.number,
+              issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: body
