@@ -21,6 +21,7 @@ jobs:
           exclude: ZipishLens/wwwroot/**
           minimumReportSeverity: 'WARNING'
   deploy:
+    if: github.ref_name == 'main'
     needs: [ code_analysis ]
     permissions:
       contents: read
@@ -35,15 +36,34 @@ jobs:
         run: |
           dotnet publish -c Release ZipishLens -o output
       - name: Deploy
-        if: github.ref_name == 'main'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_WORKERS_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+  preview:
+    if: github.ref_name != 'main'
+    needs: [ code_analysis ]
+    permissions:
+      contents: read
+      deployments: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Build
+        run: |
+          dotnet publish -c Release ZipishLens -o output
       - name: Deploy Preview
-        if: github.ref_name != 'main'
+        id: deploy-preview
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_WORKERS_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: versions upload
+      - name: Output Preview URL to Pull Request Summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy-preview.outputs.deployment-url }}
+        run: |
+          echo "Deployment URL: ${DEPLOYMENT_URL}" >> $GITHUB_STEP_SUMMARY
