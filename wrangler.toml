@@ -1,5 +1,8 @@
 name = "zipish-lens"
 compatibility_date = "2025-04-01"
+routes = [
+  { pattern = "zipish-lens.muno92.dev", custom_domain = true }
+ ]
 
 [assets]
 directory = "output/wwwroot"
