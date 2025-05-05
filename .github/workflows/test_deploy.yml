@@ -62,8 +62,22 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_WORKERS_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: versions upload
-      - name: Output Preview URL to Pull Request Summary
+      - name: Output Preview URL to Pull Request
         env:
           DEPLOYMENT_URL: ${{ steps.deploy-preview.outputs.deployment-url }}
-        run: |
-          echo "Deployment URL: ${DEPLOYMENT_URL}" >> $GITHUB_STEP_SUMMARY
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const body = `
+            # Preview URL
+  
+            | Name                    | Result |
+            | ----------------------- | - |
+            | **Preview URL**:        | ${process.env.DEPLOYMENT_URL} |
+            `;
+            
+            await github.rest.pulls.createComment({
+              ...context.repo,
+              pull_number: context.payload.pull_request.number,
+              body: body,
+            });
