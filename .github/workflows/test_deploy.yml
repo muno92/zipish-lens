@@ -95,7 +95,8 @@ jobs:
                 repo: context.repo.repo,
                 body: body
               });
-              return;           
+              return;
+            }
             await github.rest.issues.createComment({
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
