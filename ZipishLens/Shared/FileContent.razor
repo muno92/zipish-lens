@@ -6,7 +6,7 @@
 {
     <img src="data:image/@( Extension );base64,@( Convert.ToBase64String(File.ReadAllBytes(FilePath)) )" />
 }
-else if(new [] {"txt", "json", "xml"}.Contains(Extension))
+else if(new [] {"txt", "json", "xml", "strings"}.Contains(Extension))
 {
     <pre>@ReadTextFile(FilePath)</pre>
 }
@@ -32,7 +32,7 @@ else
             return FormatXml(filePath);
         }
 
-        return File.ReadAllText(filePath);
+        return File.ReadAllText(filePath).Replace("\\r\\n", "\n").Replace("\\r", "\n").Replace("\\n", "\n");
     }
 
     private string FormatJson(string jsonContent)
