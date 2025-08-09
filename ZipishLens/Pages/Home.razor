@@ -10,7 +10,14 @@
             </div>
         </div>
 
-        <DirectoryEntries EntryPaths="_loadedFiles" OnSelectFile="SelectFile" IsRoot="true"/>
+        <div class="desktop-view">
+            <DirectoryEntries EntryPaths="_loadedFiles" OnSelectFile="SelectFile" IsRoot="true"/>
+        </div>
+
+        <details class="mobile-view" open>
+            <summary>Files</summary>
+            <DirectoryEntries EntryPaths="_loadedFiles" OnSelectFile="SelectFile" IsRoot="true"/>
+        </details>
     </nav>
 
     <section>
@@ -18,7 +25,6 @@
             <InputFile OnChange="LoadFiles"/>
             <a class="about" href="https://github.com/muno92/zipish-lens/" target="_blank">
                 <img src="github-mark.svg"/>
-                About
             </a>
         </div>
 
