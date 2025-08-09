@@ -11,6 +11,10 @@ main {
         display: none;
     }
 
+    .desktop-view {
+        display: block;
+    }
+
     .sidebar {
         background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
         display: flex;
@@ -23,9 +27,6 @@ main {
             justify-content: space-between;
         }
 
-        .desktop-view {
-            display: block;
-        }
 
         .mobile-view summary {
             color: white;
