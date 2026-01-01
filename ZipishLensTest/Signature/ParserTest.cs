@@ -1,3 +1,4 @@
+using System.Numerics;
 using NUnit.Framework;
 using ZipishLens.Signature;
 
@@ -6,14 +7,30 @@ namespace ZipishLensTest.Signature;
 public class ParserTest
 {
     [Test]
-    public void TestParseSignature()
+    public void TestParseSignatureVersion()
     {
-        var signature = Parser.Parse(File.ReadAllBytes("Fixtures/signature").AsMemory());
+        var signature = ParseFixture("signature");
 
-        Assert.That(signature, Is.EqualTo(new SignedData(
-            1,
-            "2.16.840.1.101.3.4.2.1"
-        )));
+        Assert.That(signature.Version, Is.EqualTo((BigInteger)1));
+    }
+
+    [Test]
+    public void TestParseSignatureDigestAlgorithm()
+    {
+        var signature = ParseFixture("signature");
+
+        Assert.That(signature.DigestAlgorithmIdentifiers, Is.EqualTo("2.16.840.1.101.3.4.2.1"));
+    }
+
+    [Test]
+    public void TestParseSignatureCertificates()
+    {
+        var signature = ParseFixture("signature");
+
+        Assert.That(signature.Certificates, Is.EquivalentTo([
+            new Certificate(),
+            new Certificate()
+        ]));
     }
 
     [TestCase("dummy.txt")]
@@ -24,7 +41,12 @@ public class ParserTest
     {
         Assert.Throws<InvalidDataException>(() =>
         {
-            var signature = Parser.Parse(File.ReadAllBytes($"Fixtures/{filename}").AsMemory());
+            var signature = ParseFixture(filename);
         });
+    }
+
+    private static SignedData ParseFixture(string filename)
+    {
+        return Parser.Parse(File.ReadAllBytes($"Fixtures/{filename}").AsMemory());
     }
 }

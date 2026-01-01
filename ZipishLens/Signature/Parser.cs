@@ -29,13 +29,36 @@ public class Parser
 
     private static SignedData ParseSignedDataContent(AsnReader reader)
     {
-        var contentTag = new Asn1Tag(TagClass.ContextSpecific, 0);
-        var content = reader.ReadSequence(contentTag);
+        var content = reader.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0));
         var signedData = content.ReadSequence();
 
         var version = signedData.ReadInteger();
         var digestAlgorithmIdentifiers = signedData.ReadSetOf().ReadSequence().ReadObjectIdentifier();
+        // Skip encapContentInfo. (that is absent)
+        signedData.ReadSequence();
+        var certificates = EnumerateCertificates(signedData.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0)));
 
-        return new SignedData(version, digestAlgorithmIdentifiers);
+        return new SignedData(
+            version,
+            digestAlgorithmIdentifiers,
+            certificates
+        );
+    }
+
+    private static IReadOnlyList<Certificate> EnumerateCertificates(AsnReader reader)
+    {
+        var certificates = new List<Certificate>();
+
+        while (reader.HasData)
+        {
+            certificates.Add(ParseCertificate(reader.ReadSequence()));
+        }
+
+        return certificates.AsReadOnly();
+    }
+
+    private static Certificate ParseCertificate(AsnReader reader)
+    {
+        return new Certificate();
     }
 }

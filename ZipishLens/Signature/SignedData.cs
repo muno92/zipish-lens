@@ -4,5 +4,6 @@ namespace ZipishLens.Signature;
 
 public record SignedData(
     BigInteger Version,
-    string DigestAlgorithmIdentifiers
+    string DigestAlgorithmIdentifiers,
+    IReadOnlyList<Certificate> Certificates
 );
