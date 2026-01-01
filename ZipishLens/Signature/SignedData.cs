@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace ZipishLens.Signature;
 
-public record SignedData();
+public record SignedData(BigInteger Version);

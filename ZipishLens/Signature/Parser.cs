@@ -18,12 +18,23 @@ public class Parser
             {
                 throw new InvalidDataException("Not a PKCS#7 SignedData structure");
             }
+
+            return ParseSignedDataContent(contentInfo);
         }
         catch (AsnContentException e)
         {
             throw new InvalidDataException("Invalid signature format", e);
         }
+    }
 
-        return new SignedData();
+    private static SignedData ParseSignedDataContent(AsnReader reader)
+    {
+        var contentTag = new Asn1Tag(TagClass.ContextSpecific, 0);
+        var content = reader.ReadSequence(contentTag);
+        var signedData = content.ReadSequence();
+
+        var version = signedData.ReadInteger();
+
+        return new SignedData(version);
     }
 }
