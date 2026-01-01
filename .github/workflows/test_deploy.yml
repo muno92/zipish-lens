@@ -21,8 +21,17 @@ jobs:
           exclude: ZipishLens/wwwroot/**
           minimumReportSeverity: 'WARNING'
           ignoreIssueType: NotAccessedPositionalProperty.Global
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Run Test
+        run: dotnet test ZipishLensTest
   deploy:
-    needs: [ code_analysis ]
+    needs: [ code_analysis, test ]
     permissions:
       contents: read
       deployments: write
