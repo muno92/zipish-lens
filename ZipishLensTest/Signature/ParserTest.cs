@@ -36,7 +36,7 @@ public class ParserTest
                     OrganizationalUnitName = "Team Identifier",
                     OrganizationName = "Developer Name"
                 };
-                return cert with { CertInfo = cert.CertInfo with { Subject = maskedSubject } };
+                return new Certificate(cert.CertInfo with { Subject = maskedSubject });
             }
 
             return cert;
