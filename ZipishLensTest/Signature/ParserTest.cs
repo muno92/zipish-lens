@@ -41,7 +41,7 @@ public class ParserTest
     {
         Assert.Throws<InvalidDataException>(() =>
         {
-            var signature = ParseFixture(filename);
+            ParseFixture(filename);
         });
     }
 
