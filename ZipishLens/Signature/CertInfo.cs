@@ -7,5 +7,6 @@ public record CertInfo(
     // Skip Serial Number
     string SignatureIdentifier,
     RelativeDistinguishedName Issuer,
-    Validity Validity
+    Validity Validity,
+    RelativeDistinguishedName Subject
 );

@@ -4,5 +4,6 @@ public record RelativeDistinguishedName(
     string CommonName,
     string OrganizationalUnitName,
     string OrganizationName,
-    string CountryName
+    string CountryName,
+    string? UserId
 );

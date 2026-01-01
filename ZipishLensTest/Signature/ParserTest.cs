@@ -27,7 +27,22 @@ public class ParserTest
     {
         var signature = ParseFixture("signature");
 
-        Assert.That(signature.Certificates, Is.EquivalentTo([
+        var maskedCertificates = signature.Certificates.Select((cert, index) =>
+        {
+            if (index == 0)
+            {
+                var maskedSubject = cert.CertInfo.Subject with
+                {
+                    OrganizationalUnitName = "Team Identifier",
+                    OrganizationName = "Developer Name"
+                };
+                return cert with { CertInfo = cert.CertInfo with { Subject = maskedSubject } };
+            }
+
+            return cert;
+        }).ToList();
+
+        Assert.That(maskedCertificates, Is.EquivalentTo([
             new Certificate(new CertInfo(
                 2,
                 "1.2.840.113549.1.1.11",
@@ -35,11 +50,19 @@ public class ParserTest
                     CommonName: "Apple Worldwide Developer Relations Certification Authority",
                     OrganizationalUnitName: "G4",
                     OrganizationName: "Apple Inc.",
-                    CountryName: "US"
+                    CountryName: "US",
+                    UserId: null
                 ),
                 new Validity(
                     NotBefore: new DateTime(2025, 11, 17, 13, 21, 26, DateTimeKind.Utc),
                     NotAfter: new DateTime(2026, 12, 17, 13, 21, 25, DateTimeKind.Utc)
+                ),
+                new RelativeDistinguishedName(
+                    CommonName: "Pass Type ID: pass.com.example.muno92",
+                    OrganizationalUnitName: "Team Identifier",
+                    OrganizationName: "Developer Name",
+                    CountryName: "JP",
+                    UserId: "pass.com.example.muno92"
                 )
             )),
             new Certificate(new CertInfo(
@@ -49,11 +72,19 @@ public class ParserTest
                     CommonName: "Apple Root CA",
                     OrganizationalUnitName: "Apple Certification Authority",
                     OrganizationName: "Apple Inc.",
-                    CountryName: "US"
+                    CountryName: "US",
+                    UserId: null
                 ),
                 new Validity(
                     NotBefore: new DateTime(2020, 12, 16, 19, 36, 04, DateTimeKind.Utc),
                     NotAfter: new DateTime(2030, 12, 10, 00, 00, 00, DateTimeKind.Utc)
+                ),
+                new RelativeDistinguishedName(
+                    CommonName: "Apple Worldwide Developer Relations Certification Authority",
+                    OrganizationalUnitName: "G4",
+                    OrganizationName: "Apple Inc.",
+                    CountryName: "US",
+                    UserId: null
                 )
             )),
         ]));

@@ -67,12 +67,14 @@ public class Parser
         var signatureIdentifier = tbsCertificate.ReadSequence().ReadObjectIdentifier();
         var issuer = ParseName(tbsCertificate.ReadSequence());
         var validity = ParseValidity(tbsCertificate.ReadSequence());
+        var subject = ParseName(tbsCertificate.ReadSequence());
 
         return new Certificate(new CertInfo(
             version,
             signatureIdentifier,
             issuer,
-            validity
+            validity,
+            subject
         ));
     }
 
@@ -82,6 +84,7 @@ public class Parser
         var organizationName = "";
         var organizationalUnitName = "";
         var countryName = "";
+        var userId = null as string;
 
         while (reader.HasData)
         {
@@ -104,6 +107,10 @@ public class Parser
                 case "2.5.4.11":
                     organizationalUnitName = ReadString(attribute);
                     break;
+                // userId (uid)
+                case "0.9.2342.19200300.100.1.1":
+                    userId = ReadString(attribute);
+                    break;
             }
         }
 
@@ -111,7 +118,8 @@ public class Parser
             CommonName: commonName,
             OrganizationalUnitName: organizationalUnitName,
             OrganizationName: organizationName,
-            CountryName: countryName
+            CountryName: countryName,
+            UserId: userId
         );
     }
 
