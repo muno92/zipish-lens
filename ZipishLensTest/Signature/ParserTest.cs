@@ -10,11 +10,12 @@ public class ParserTest
     {
         var signature = Parser.Parse(File.ReadAllBytes("Fixtures/signature").AsMemory());
 
-        Assert.That(signature, Is.Not.Null);
+        Assert.That(signature, Is.EqualTo(new SignedData()));
     }
 
     [TestCase("dummy.txt")]
     [TestCase("signature.pem")]
+    [TestCase("digested_text.der")]
     [Test]
     public void TestParseInvalidSignature(string filename)
     {
