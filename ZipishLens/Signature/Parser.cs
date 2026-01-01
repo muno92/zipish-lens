@@ -65,10 +65,62 @@ public class Parser
         // Skip serialNumber
         tbsCertificate.ReadInteger();
         var signatureIdentifier = tbsCertificate.ReadSequence().ReadObjectIdentifier();
+        var issuer = ParseName(tbsCertificate.ReadSequence());
 
         return new Certificate(new CertInfo(
             version,
-            signatureIdentifier
+            signatureIdentifier,
+            issuer
         ));
+    }
+
+    private static RelativeDistinguishedName ParseName(AsnReader reader)
+    {
+        var commonName = "";
+        var organizationName = "";
+        var organizationalUnitName = "";
+        var countryName = "";
+
+        while (reader.HasData)
+        {
+            var attribute = reader.ReadSetOf().ReadSequence();
+            switch (attribute.ReadObjectIdentifier())
+            {
+                // countryName (C)
+                case "2.5.4.6":
+                    countryName = ReadString(attribute);
+                    break;
+                // commonName (CN)
+                case "2.5.4.3":
+                    commonName = ReadString(attribute);
+                    break;
+                // organizationName (O)
+                case "2.5.4.10":
+                    organizationName = ReadString(attribute);
+                    break;
+                // organizationalUnitName (OU)
+                case "2.5.4.11":
+                    organizationalUnitName = ReadString(attribute);
+                    break;
+            }
+        }
+
+        return new RelativeDistinguishedName(
+            CommonName: commonName,
+            OrganizationalUnitName: organizationalUnitName,
+            OrganizationName: organizationName,
+            CountryName: countryName
+        );
+    }
+
+    private static string ReadString(AsnReader stringSequence)
+    {
+        return stringSequence.PeekTag().TagValue switch
+        {
+            (int)UniversalTagNumber.PrintableString => stringSequence.ReadCharacterString(UniversalTagNumber
+                .PrintableString),
+            (int)UniversalTagNumber.UTF8String => stringSequence.ReadCharacterString(UniversalTagNumber.UTF8String),
+            _ => "",
+        };
     }
 }

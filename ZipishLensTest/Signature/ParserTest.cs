@@ -30,12 +30,24 @@ public class ParserTest
         Assert.That(signature.Certificates, Is.EquivalentTo([
             new Certificate(new CertInfo(
                 2,
-                "1.2.840.113549.1.1.11"
+                "1.2.840.113549.1.1.11",
+                new RelativeDistinguishedName(
+                    CommonName: "Apple Worldwide Developer Relations Certification Authority",
+                    OrganizationalUnitName: "G4",
+                    OrganizationName: "Apple Inc.",
+                    CountryName: "US"
+                )
             )),
             new Certificate(new CertInfo(
                 2,
-                "1.2.840.113549.1.1.11"
-            ))
+                "1.2.840.113549.1.1.11",
+                new RelativeDistinguishedName(
+                    CommonName: "Apple Root CA",
+                    OrganizationalUnitName: "Apple Certification Authority",
+                    OrganizationName: "Apple Inc.",
+                    CountryName: "US"
+                )
+            )),
         ]));
     }
 
