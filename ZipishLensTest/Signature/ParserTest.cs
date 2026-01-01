@@ -14,6 +14,7 @@ public class ParserTest
     }
 
     [TestCase("dummy.txt")]
+    [TestCase("signature.pem")]
     [Test]
     public void TestParseInvalidSignature(string filename)
     {
