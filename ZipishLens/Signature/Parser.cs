@@ -60,8 +60,15 @@ public class Parser
     private static Certificate ParseCertificate(AsnReader reader)
     {
         var tbsCertificate = reader.ReadSequence();
-        var version = tbsCertificate.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0)).ReadInteger();
 
-        return new Certificate(new CertInfo(version));
+        var version = tbsCertificate.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0)).ReadInteger();
+        // Skip serialNumber
+        tbsCertificate.ReadInteger();
+        var signatureIdentifier = tbsCertificate.ReadSequence().ReadObjectIdentifier();
+
+        return new Certificate(new CertInfo(
+            version,
+            signatureIdentifier
+        ));
     }
 }

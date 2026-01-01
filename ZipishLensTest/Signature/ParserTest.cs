@@ -28,8 +28,14 @@ public class ParserTest
         var signature = ParseFixture("signature");
 
         Assert.That(signature.Certificates, Is.EquivalentTo([
-            new Certificate(new CertInfo(2)),
-            new Certificate(new CertInfo(2))
+            new Certificate(new CertInfo(
+                2,
+                "1.2.840.113549.1.1.11"
+            )),
+            new Certificate(new CertInfo(
+                2,
+                "1.2.840.113549.1.1.11"
+            ))
         ]));
     }
 
