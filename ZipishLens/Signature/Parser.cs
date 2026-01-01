@@ -59,6 +59,9 @@ public class Parser
 
     private static Certificate ParseCertificate(AsnReader reader)
     {
-        return new Certificate();
+        var certificate = reader.ReadSequence();
+        var version = certificate.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0)).ReadInteger();
+
+        return new Certificate(new CertInfo(version));
     }
 }

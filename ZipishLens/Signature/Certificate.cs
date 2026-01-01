@@ -1,3 +1,5 @@
 namespace ZipishLens.Signature;
 
-public record Certificate();
+public record Certificate(
+    CertInfo CertInfo
+);

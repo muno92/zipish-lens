@@ -28,8 +28,8 @@ public class ParserTest
         var signature = ParseFixture("signature");
 
         Assert.That(signature.Certificates, Is.EquivalentTo([
-            new Certificate(),
-            new Certificate()
+            new Certificate(new CertInfo(2)),
+            new Certificate(new CertInfo(2))
         ]));
     }
 
@@ -39,10 +39,7 @@ public class ParserTest
     [Test]
     public void TestParseInvalidSignature(string filename)
     {
-        Assert.Throws<InvalidDataException>(() =>
-        {
-            ParseFixture(filename);
-        });
+        Assert.Throws<InvalidDataException>(() => { ParseFixture(filename); });
     }
 
     private static SignedData ParseFixture(string filename)
