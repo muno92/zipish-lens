@@ -8,22 +8,36 @@ public class Parser
 
     public static SignedData Parse(ReadOnlyMemory<byte> signature)
     {
-        var reader = new AsnReader(signature, AsnEncodingRules.DER);
+        var contentInfo = ParseSignature(signature);
+
+        var contentType = contentInfo.ReadObjectIdentifier();
+        if (contentType != OidPkcs7SignedData)
+        {
+            throw new InvalidDataException("Not a PKCS#7 SignedData structure");
+        }
+
+        return ParseSignedDataContent(contentInfo);
+    }
+
+    private static AsnReader ParseSignature(ReadOnlyMemory<byte> signature)
+    {
+        var derReader = new AsnReader(signature, AsnEncodingRules.DER);
         try
         {
-            var contentInfo = reader.ReadSequence();
-            var contentType = contentInfo.ReadObjectIdentifier();
-
-            if (contentType != OidPkcs7SignedData)
-            {
-                throw new InvalidDataException("Not a PKCS#7 SignedData structure");
-            }
-
-            return ParseSignedDataContent(contentInfo);
+            return derReader.ReadSequence();
         }
-        catch (AsnContentException e)
+        catch (AsnContentException)
         {
-            throw new InvalidDataException("Invalid signature format", e);
+            // Some signatures are BER encoded.
+            var berReader = new AsnReader(signature, AsnEncodingRules.BER);
+            try
+            {
+                return berReader.ReadSequence();
+            }
+            catch (AsnContentException e)
+            {
+                throw new InvalidDataException("Invalid signature format", e);
+            }
         }
     }
 

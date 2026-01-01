@@ -90,6 +90,13 @@ public class ParserTest
         ]));
     }
 
+    [Test]
+    [TestCase("signature_jal")] // BER encoded
+    public void TestParseValidSignature(string filename)
+    {
+        Assert.DoesNotThrow(() => { ParseFixture(filename); });
+    }
+
     [TestCase("dummy.txt")]
     [TestCase("signature.pem")]
     [TestCase("digested_text.der")]
