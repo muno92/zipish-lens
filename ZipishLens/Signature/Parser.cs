@@ -66,11 +66,13 @@ public class Parser
         tbsCertificate.ReadInteger();
         var signatureIdentifier = tbsCertificate.ReadSequence().ReadObjectIdentifier();
         var issuer = ParseName(tbsCertificate.ReadSequence());
+        var validity = ParseValidity(tbsCertificate.ReadSequence());
 
         return new Certificate(new CertInfo(
             version,
             signatureIdentifier,
-            issuer
+            issuer,
+            validity
         ));
     }
 
@@ -110,6 +112,17 @@ public class Parser
             OrganizationalUnitName: organizationalUnitName,
             OrganizationName: organizationName,
             CountryName: countryName
+        );
+    }
+
+    private static Validity ParseValidity(AsnReader validitySequence)
+    {
+        var notBefore = validitySequence.ReadUtcTime();
+        var notAfter = validitySequence.ReadUtcTime();
+
+        return new Validity(
+            NotBefore: notBefore.DateTime,
+            NotAfter: notAfter.DateTime
         );
     }
 

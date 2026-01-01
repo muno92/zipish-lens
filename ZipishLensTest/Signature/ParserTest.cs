@@ -36,6 +36,10 @@ public class ParserTest
                     OrganizationalUnitName: "G4",
                     OrganizationName: "Apple Inc.",
                     CountryName: "US"
+                ),
+                new Validity(
+                    NotBefore: new DateTime(2025, 11, 17, 13, 21, 26, DateTimeKind.Utc),
+                    NotAfter: new DateTime(2026, 12, 17, 13, 21, 25, DateTimeKind.Utc)
                 )
             )),
             new Certificate(new CertInfo(
@@ -46,6 +50,10 @@ public class ParserTest
                     OrganizationalUnitName: "Apple Certification Authority",
                     OrganizationName: "Apple Inc.",
                     CountryName: "US"
+                ),
+                new Validity(
+                    NotBefore: new DateTime(2020, 12, 16, 19, 36, 04, DateTimeKind.Utc),
+                    NotAfter: new DateTime(2030, 12, 10, 00, 00, 00, DateTimeKind.Utc)
                 )
             )),
         ]));

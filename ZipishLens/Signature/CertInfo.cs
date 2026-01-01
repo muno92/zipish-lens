@@ -6,5 +6,6 @@ public record CertInfo(
     BigInteger Version,
     // Skip Serial Number
     string SignatureIdentifier,
-    RelativeDistinguishedName Issuer
+    RelativeDistinguishedName Issuer,
+    Validity Validity
 );
