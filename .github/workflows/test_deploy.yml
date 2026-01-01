@@ -20,6 +20,7 @@ jobs:
           solutionPath: ./ZipishLens.sln
           exclude: ZipishLens/wwwroot/**
           minimumReportSeverity: 'WARNING'
+          ignoreIssueType: NotAccessedPositionalProperty.Global
   deploy:
     needs: [ code_analysis ]
     permissions:

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZipishLens", "ZipishLens\ZipishLens.csproj", "{F438E8AF-16BA-4E0F-AC27-D56AE282C128}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZipishLensTest", "ZipishLensTest\ZipishLensTest.csproj", "{6C9F69CF-D063-475C-A197-A6EA80DA846F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{F438E8AF-16BA-4E0F-AC27-D56AE282C128}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F438E8AF-16BA-4E0F-AC27-D56AE282C128}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F438E8AF-16BA-4E0F-AC27-D56AE282C128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C9F69CF-D063-475C-A197-A6EA80DA846F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C9F69CF-D063-475C-A197-A6EA80DA846F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C9F69CF-D063-475C-A197-A6EA80DA846F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C9F69CF-D063-475C-A197-A6EA80DA846F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
