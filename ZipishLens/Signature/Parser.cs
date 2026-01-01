@@ -34,7 +34,8 @@ public class Parser
         var signedData = content.ReadSequence();
 
         var version = signedData.ReadInteger();
+        var digestAlgorithmIdentifiers = signedData.ReadSetOf().ReadSequence().ReadObjectIdentifier();
 
-        return new SignedData(version);
+        return new SignedData(version, digestAlgorithmIdentifiers);
     }
 }

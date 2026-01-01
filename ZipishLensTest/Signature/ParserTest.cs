@@ -10,7 +10,10 @@ public class ParserTest
     {
         var signature = Parser.Parse(File.ReadAllBytes("Fixtures/signature").AsMemory());
 
-        Assert.That(signature, Is.EqualTo(new SignedData(1)));
+        Assert.That(signature, Is.EqualTo(new SignedData(
+            1,
+            "2.16.840.1.101.3.4.2.1"
+        )));
     }
 
     [TestCase("dummy.txt")]
