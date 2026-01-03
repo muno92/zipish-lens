@@ -16,7 +16,7 @@ public record SignedData(
     {
         get
         {
-            // SignerInfo is defined as a collection in the RFC, but Apple Wallet should only have one
+            // SignerInfo is defined as a collection in the RFC, but Apple Wallet should only have one.
             var signerInfo = SignerInfos.Single();
 
             return Certificates.Single(c => c.CertInfo.SerialNumber == signerInfo.IssuerAndSerialNumber?.SerialNumber);
