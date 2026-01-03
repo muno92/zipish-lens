@@ -45,6 +45,7 @@ public class ParserTest
         Assert.That(maskedCertificates, Is.EquivalentTo([
             new Certificate(new CertInfo(
                 2,
+                BigInteger.Parse("116642482170122253773863463039760007017"),
                 "1.2.840.113549.1.1.11",
                 new RelativeDistinguishedName(
                     CommonName: "Apple Worldwide Developer Relations Certification Authority",
@@ -67,6 +68,7 @@ public class ParserTest
             )),
             new Certificate(new CertInfo(
                 2,
+                BigInteger.Parse("113387405763016313506183860293995434212592045778"),
                 "1.2.840.113549.1.1.11",
                 new RelativeDistinguishedName(
                     CommonName: "Apple Root CA",

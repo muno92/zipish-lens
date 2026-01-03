@@ -76,8 +76,7 @@ public class Parser
         var tbsCertificate = reader.ReadSequence();
 
         var version = tbsCertificate.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0)).ReadInteger();
-        // Skip serialNumber
-        tbsCertificate.ReadInteger();
+        var serialNumber = tbsCertificate.ReadInteger();
         var signatureIdentifier = tbsCertificate.ReadSequence().ReadObjectIdentifier();
         var issuer = ParseName(tbsCertificate.ReadSequence());
         var validity = ParseValidity(tbsCertificate.ReadSequence());
@@ -85,6 +84,7 @@ public class Parser
 
         return new Certificate(new CertInfo(
             version,
+            serialNumber,
             signatureIdentifier,
             issuer,
             validity,

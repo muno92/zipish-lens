@@ -4,7 +4,7 @@ namespace ZipishLens.Signature;
 
 public record CertInfo(
     BigInteger Version,
-    // Skip Serial Number
+    BigInteger SerialNumber,
     string SignatureIdentifier,
     RelativeDistinguishedName Issuer,
     Validity Validity,
