@@ -94,6 +94,18 @@ public class ParserTest
     }
 
     [Test]
+    public void TestParseSignatureSignerInfos()
+    {
+        var signature = ParseFixture("signature");
+
+        Assert.That(signature.SignerInfos, Is.EquivalentTo([
+            new SignerInfo(
+                1
+            ),
+        ]));
+    }
+
+    [Test]
     [TestCase("signature_jal")] // BER encoded
     public void TestParseValidSignature(string filename)
     {

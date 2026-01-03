@@ -52,11 +52,13 @@ public class Parser
         // Skip encapContentInfo. (that is absent when pass is detached.)
         signedData.ReadSequence();
         var certificates = EnumerateCertificates(signedData.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0)));
+        var signerInfos = EnumerateSignerInfos(signedData.ReadSetOf());
 
         return new SignedData(
             version,
             digestAlgorithmIdentifiers,
-            certificates
+            certificates,
+            signerInfos
         );
     }
 
@@ -91,6 +93,27 @@ public class Parser
             validity,
             subject
         ));
+    }
+
+    private static IReadOnlyList<SignerInfo> EnumerateSignerInfos(AsnReader reader)
+    {
+        var signerInfos = new List<SignerInfo>();
+
+        while (reader.HasData)
+        {
+            signerInfos.Add(ParseSignerInfo(reader.ReadSequence()));
+        }
+
+        return signerInfos.AsReadOnly();
+    }
+
+    private static SignerInfo ParseSignerInfo(AsnReader reader)
+    {
+        var version = reader.ReadInteger();
+
+        return new SignerInfo(
+            version
+        );
     }
 
     private static RelativeDistinguishedName ParseName(AsnReader reader)
