@@ -111,8 +111,19 @@ public class Parser
     {
         var version = reader.ReadInteger();
 
+        var issuerAndSerialNumber = null as IssuerAndSerialNumber;
+        if (version == 1)
+        {
+            var issuerAndSerialNumberSequence = reader.ReadSequence();
+            issuerAndSerialNumber = new IssuerAndSerialNumber(
+                ParseName(issuerAndSerialNumberSequence.ReadSequence()),
+                issuerAndSerialNumberSequence.ReadInteger()
+            );
+        }
+
         return new SignerInfo(
-            version
+            version,
+            issuerAndSerialNumber
         );
     }
 

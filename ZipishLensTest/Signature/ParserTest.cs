@@ -100,7 +100,17 @@ public class ParserTest
 
         Assert.That(signature.SignerInfos, Is.EquivalentTo([
             new SignerInfo(
-                1
+                1,
+                new IssuerAndSerialNumber(
+                    new RelativeDistinguishedName(
+                        CommonName: "Apple Worldwide Developer Relations Certification Authority",
+                        OrganizationalUnitName: "G4",
+                        OrganizationName: "Apple Inc.",
+                        CountryName: "US",
+                        UserId: null
+                    ),
+                    BigInteger.Parse("116642482170122253773863463039760007017")
+                )
             ),
         ]));
     }
