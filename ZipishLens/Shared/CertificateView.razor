@@ -5,8 +5,8 @@
     <li>
         Validity
         <ul>
-            <li>Not Before: @(FormatDateTime(Certificate.CertInfo.Validity.NotBefore))</li>
-            <li>Not After: @(FormatDateTime(Certificate.CertInfo.Validity.NotAfter))</li>
+            <li>Not Before: @FormatDateTime(Certificate.CertInfo.Validity.NotBefore)</li>
+            <li>Not After: @FormatDateTime(Certificate.CertInfo.Validity.NotAfter)</li>
         </ul>
     </li>
     <li>Subject: @(Certificate.CertInfo.Subject)</li>
@@ -15,5 +15,5 @@
 @code {
     [Parameter] public required Certificate Certificate { get; set; }
 
-    public string FormatDateTime(DateTime dateTime) => dateTime.ToString("MMM dd HH:mm:ss yyyy 'GMT'", CultureInfo.InvariantCulture);
+    private static string FormatDateTime(DateTime dateTime) => dateTime.ToString("MMM dd HH:mm:ss yyyy 'GMT'", CultureInfo.InvariantCulture);
 }
