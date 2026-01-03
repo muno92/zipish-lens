@@ -4,5 +4,6 @@ namespace ZipishLens.Signature.Resource;
 
 public record SignerInfo(
     BigInteger Version,
-    IssuerAndSerialNumber? IssuerAndSerialNumber
+    IssuerAndSerialNumber? IssuerAndSerialNumber,
+    string DigestAlgorithmIdentifier
 );

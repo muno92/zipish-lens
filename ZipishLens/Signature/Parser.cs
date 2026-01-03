@@ -121,9 +121,12 @@ public class Parser
             );
         }
 
+        var digestAlgorithmIdentifier = reader.ReadSequence().ReadObjectIdentifier();
+
         return new SignerInfo(
             version,
-            issuerAndSerialNumber
+            issuerAndSerialNumber,
+            digestAlgorithmIdentifier
         );
     }
 

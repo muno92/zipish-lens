@@ -110,7 +110,8 @@ public class ParserTest
                         UserId: null
                     ),
                     BigInteger.Parse("116642482170122253773863463039760007017")
-                )
+                ),
+                "2.16.840.1.101.3.4.2.1"
             ),
         ]));
     }
