@@ -1,7 +1,7 @@
 @using System.Globalization
 @using ZipishLens.Signature
 <ul>
-    @foreach (var (cert, i) in Signature.Certificates.Select((certificate, i) => (certificate, i)))
+    @foreach (var cert in Signature.Certificates)
     {
         <li>
             @(cert.IsIntermediate(Signature.Certificates) ? "Intermediate Certificate" : "Certificate")
