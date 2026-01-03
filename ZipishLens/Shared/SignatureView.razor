@@ -4,7 +4,7 @@
     @foreach (var (cert, i) in Signature.Certificates.Select((certificate, i) => (certificate, i)))
     {
         <li>
-            @(i == 0 ? "Certificate" : "Intermediate Certificate")
+            @(cert.IsIntermediate(Signature.Certificates) ? "Intermediate Certificate" : "Certificate")
             <ul>
                 <li>Issuer: @(cert.CertInfo.Issuer)</li>
                 <li>
