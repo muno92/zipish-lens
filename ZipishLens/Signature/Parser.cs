@@ -122,12 +122,44 @@ public class Parser
         }
 
         var digestAlgorithmIdentifier = reader.ReadSequence().ReadObjectIdentifier();
+        var signedAttributes = ParseSignedAttributes(reader.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0)));
 
         return new SignerInfo(
             version,
             issuerAndSerialNumber,
-            digestAlgorithmIdentifier
+            digestAlgorithmIdentifier,
+            signedAttributes
         );
+    }
+
+    private static SignedAttributes ParseSignedAttributes(AsnReader reader)
+    {
+        var contentType = "";
+        // signingTime is required for Apple Wallet, so it's only default value.
+        var signingTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        var messageDigest = null as string;
+
+        while (reader.HasData)
+        {
+            var attribute = reader.ReadSequence();
+            switch (attribute.ReadObjectIdentifier())
+            {
+                // contentType
+                case "1.2.840.113549.1.9.3":
+                    contentType = attribute.ReadSetOf().ReadObjectIdentifier();
+                    break;
+                // signingTime
+                case "1.2.840.113549.1.9.5":
+                    signingTime = attribute.ReadSetOf().ReadUtcTime().DateTime;
+                    break;
+                // messageDigest
+                case "1.2.840.113549.1.9.4":
+                    messageDigest = Convert.ToHexString(attribute.ReadSetOf().ReadOctetString());
+                    break;
+            }
+        }
+
+        return new SignedAttributes(signingTime, contentType, messageDigest);
     }
 
     private static RelativeDistinguishedName ParseName(AsnReader reader)

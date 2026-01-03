@@ -111,7 +111,12 @@ public class ParserTest
                     ),
                     BigInteger.Parse("116642482170122253773863463039760007017")
                 ),
-                "2.16.840.1.101.3.4.2.1"
+                "2.16.840.1.101.3.4.2.1",
+                new SignedAttributes(
+                    new DateTime(2025, 12, 29, 12, 38, 47, DateTimeKind.Utc),
+                    "1.2.840.113549.1.7.1",
+                    "873838CAF1B2AFB40F36553B0249E4C68C16267B8490C77F48EB30857C89CF98"
+                )
             ),
         ]));
     }
