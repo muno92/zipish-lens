@@ -48,7 +48,7 @@ public class Parser
 
         var version = signedData.ReadInteger();
         var digestAlgorithmIdentifiers = signedData.ReadSetOf().ReadSequence().ReadObjectIdentifier();
-        // Skip encapContentInfo. (that is absent)
+        // Skip encapContentInfo. (that is absent when pass is detached.)
         signedData.ReadSequence();
         var certificates = EnumerateCertificates(signedData.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0)));
 
