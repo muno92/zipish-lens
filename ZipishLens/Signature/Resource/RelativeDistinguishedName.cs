@@ -1,4 +1,4 @@
-namespace ZipishLens.Signature;
+namespace ZipishLens.Signature.Resource;
 
 public record RelativeDistinguishedName(
     string CommonName,

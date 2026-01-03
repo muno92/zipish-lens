@@ -3,6 +3,7 @@
 @using System.Text.RegularExpressions
 @using System.Xml
 @using ZipishLens.Signature
+@using ZipishLens.Signature.Resource
 @if (new [] {"jpg", "jpeg", "png"}.Contains(Extension))
 {
     <img src="data:image/@( Extension );base64,@( Convert.ToBase64String(File.ReadAllBytes(FilePath)) )" />

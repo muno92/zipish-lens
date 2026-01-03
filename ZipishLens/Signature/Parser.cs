@@ -1,4 +1,5 @@
 using System.Formats.Asn1;
+using ZipishLens.Signature.Resource;
 
 namespace ZipishLens.Signature;
 

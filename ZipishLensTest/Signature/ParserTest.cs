@@ -1,6 +1,7 @@
 using System.Numerics;
 using NUnit.Framework;
 using ZipishLens.Signature;
+using ZipishLens.Signature.Resource;
 
 namespace ZipishLensTest.Signature;
 

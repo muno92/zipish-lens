@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace ZipishLens.Signature;
+namespace ZipishLens.Signature.Resource;
 
 public record CertInfo(
     BigInteger Version,
