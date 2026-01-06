@@ -1,8 +1,8 @@
 @using ZipishLens.Signature.Resource
 <ul>
     <li>
-        Issuer Certificate
-        <CertificateView Certificate="@Signature.IssuerCertificate"/>
+        Signer Certificate
+        <CertificateView Certificate="@Signature.SignerCertificate"/>
     </li>
     @if (Signature.IntermediateCertificate is not null)
     {

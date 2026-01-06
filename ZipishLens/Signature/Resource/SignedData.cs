@@ -12,7 +12,7 @@ public record SignedData(
     /// <summary>
     /// Returns the certificate that signed the signature.
     /// </summary>
-    public Certificate IssuerCertificate
+    public Certificate SignerCertificate
     {
         get
         {
