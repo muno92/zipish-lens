@@ -84,6 +84,47 @@ public class Parser
         var issuer = ParseName(tbsCertificate.ReadSequence());
         var validity = ParseValidity(tbsCertificate.ReadSequence());
         var subject = ParseName(tbsCertificate.ReadSequence());
+        // Skip subjectPublicKeyInfo.
+        tbsCertificate.ReadSequence();
+
+        if (tbsCertificate.HasData &&
+            tbsCertificate.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 1)))
+        {
+            // Skip issuerUniqueID if it exists.
+            tbsCertificate.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 1));
+        }
+
+        if (tbsCertificate.HasData &&
+            tbsCertificate.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 2)))
+        {
+            // Skip subjectUniqueID if it exists.
+            tbsCertificate.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 2));
+        }
+
+        var subjectKeyIdentifier = null as byte[];
+        if (tbsCertificate.HasData &&
+            tbsCertificate.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 3)))
+        {
+            var extensions = tbsCertificate.ReadSetOf(new Asn1Tag(TagClass.ContextSpecific, 3)).ReadSequence();
+            while (extensions.HasData)
+            {
+                var extension = extensions.ReadSequence();
+                if (extension.ReadObjectIdentifier() != "2.5.29.14")
+                {
+                    continue;
+                }
+
+                // Skip boolean if exists.
+                if (extension.PeekTag().TagValue == (int)UniversalTagNumber.Boolean)
+                {
+                    extension.ReadBoolean();
+                }
+
+                var extnValue = extension.ReadOctetString();
+                var innerReader = new AsnReader(extnValue, AsnEncodingRules.DER);
+                subjectKeyIdentifier = innerReader.ReadOctetString();
+            }
+        }
 
         return new Certificate(new CertInfo(
             version,
@@ -91,7 +132,8 @@ public class Parser
             signatureIdentifier,
             issuer,
             validity,
-            subject
+            subject,
+            subjectKeyIdentifier
         ));
     }
 
@@ -112,6 +154,8 @@ public class Parser
         var version = reader.ReadInteger();
 
         var issuerAndSerialNumber = null as IssuerAndSerialNumber;
+        var subjectKeyIdentifier = null as byte[];
+
         if (version == 1)
         {
             var issuerAndSerialNumberSequence = reader.ReadSequence();
@@ -120,6 +164,11 @@ public class Parser
                 issuerAndSerialNumberSequence.ReadInteger()
             );
         }
+        else if (version == 3)
+        {
+            // If CMS version is 3, signerInfo has not issuerAndSerialNumber, but subjectKeyIdentifier.
+            subjectKeyIdentifier = reader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 0));
+        }
 
         var digestAlgorithmIdentifier = reader.ReadSequence().ReadObjectIdentifier();
         var signedAttributes = ParseSignedAttributes(reader.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0)));
@@ -127,6 +176,7 @@ public class Parser
         return new SignerInfo(
             version,
             issuerAndSerialNumber,
+            subjectKeyIdentifier,
             digestAlgorithmIdentifier,
             signedAttributes
         );
