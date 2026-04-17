@@ -8,5 +8,6 @@ public record CertInfo(
     string SignatureIdentifier,
     RelativeDistinguishedName Issuer,
     Validity Validity,
-    RelativeDistinguishedName Subject
+    RelativeDistinguishedName Subject,
+    byte[]? SubjectKeyIdentifier
 );

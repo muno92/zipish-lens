@@ -19,6 +19,12 @@ public record SignedData(
             // SignerInfo is defined as a collection in the RFC, but Apple Wallet should only have one.
             var signerInfo = SignerInfos.Single();
 
+            if (signerInfo.Version == 3)
+            {
+                return Certificates.Single(c =>
+                    c.CertInfo.SubjectKeyIdentifier.AsSpan().SequenceEqual(signerInfo.SubjectKeyIdentifier));
+            }
+
             return Certificates.Single(c => c.CertInfo.SerialNumber == signerInfo.IssuerAndSerialNumber?.SerialNumber);
         }
     }

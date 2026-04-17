@@ -30,17 +30,17 @@ public class ParserTest
 
         var maskedCertificates = signature.Certificates.Select((cert, index) =>
         {
+            var subject = cert.CertInfo.Subject;
             if (index == 0)
             {
-                var maskedSubject = cert.CertInfo.Subject with
+                subject = cert.CertInfo.Subject with
                 {
                     OrganizationalUnitName = "Team Identifier",
                     OrganizationName = "Developer Name"
                 };
-                return new Certificate(cert.CertInfo with { Subject = maskedSubject });
             }
 
-            return cert;
+            return new Certificate(cert.CertInfo with { Subject = subject, SubjectKeyIdentifier = null });
         }).ToList();
 
         Assert.That(maskedCertificates, Is.EquivalentTo([
@@ -65,7 +65,8 @@ public class ParserTest
                     OrganizationName: "Developer Name",
                     CountryName: "JP",
                     UserId: "pass.com.example.muno92"
-                )
+                ),
+                null
             )),
             new Certificate(new CertInfo(
                 2,
@@ -88,7 +89,8 @@ public class ParserTest
                     OrganizationName: "Apple Inc.",
                     CountryName: "US",
                     UserId: null
-                )
+                ),
+                null
             )),
         ]));
     }
@@ -111,6 +113,7 @@ public class ParserTest
                     ),
                     BigInteger.Parse("116642482170122253773863463039760007017")
                 ),
+                null,
                 "2.16.840.1.101.3.4.2.1",
                 new SignedAttributes(
                     new DateTime(2025, 12, 29, 12, 38, 47, DateTimeKind.Utc),
@@ -135,6 +138,14 @@ public class ParserTest
     public void TestParseInvalidSignature(string filename)
     {
         Assert.Throws<InvalidDataException>(() => { ParseFixture(filename); });
+    }
+
+    [Test]
+    public void TestParseCmsVersion3()
+    {
+        var signature = ParseFixture("signature_cms_version_3");
+        Assert.That(signature.SignerCertificate.CertInfo.SerialNumber,
+            Is.EqualTo(BigInteger.Parse("104184307335473168796170226991571047547")));
     }
 
     private static SignedData ParseFixture(string filename)
