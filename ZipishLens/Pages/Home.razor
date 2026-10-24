@@ -72,17 +72,19 @@
 
         var uploadedFile = obj.GetMultipleFiles().Single();
 
-        await using FileStream fs = new FileStream(_tmpFilePath, FileMode.Create);
-        try
+        await using (FileStream fs = new FileStream(_tmpFilePath, FileMode.Create))
         {
-            // Large files (> 250 MB) may not be uploaded.
-            // https://learn.microsoft.com/en-us/aspnet/core/blazor/file-uploads?view=aspnetcore-9.0#file-size-read-and-upload-limits
-            await uploadedFile.OpenReadStream(100 * 1024 * 1024).CopyToAsync(fs);
-        }
-        catch (IOException)
-        {
-            _message = "Unable to upload file. File size limit is 100MB";
-            return;
+            try
+            {
+                // Large files (> 250 MB) may not be uploaded.
+                // https://learn.microsoft.com/en-us/aspnet/core/blazor/file-uploads?view=aspnetcore-9.0#file-size-read-and-upload-limits
+                await uploadedFile.OpenReadStream(100 * 1024 * 1024).CopyToAsync(fs);
+            }
+            catch (IOException)
+            {
+                _message = "Unable to upload file. File size limit is 100MB";
+                return;
+            }
         }
 
         try
